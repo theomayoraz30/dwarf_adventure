@@ -1,9 +1,9 @@
 extends KinematicBody2D
 
-#Speed for the player
+# Speed for the player
 export (int) var SPEED = 200;
 
-var velocity = Vector2.ZERO;
+var velocity = Vector2();
 	
 func _physics_process(delta):
 	var x = Input.get_axis("left", "right");
@@ -11,6 +11,3 @@ func _physics_process(delta):
 	velocity = Vector2(x,y).normalized();
 	
 	move_and_slide(velocity * SPEED);
-
-func _ready():
-	pass
