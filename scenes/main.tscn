@@ -13,16 +13,17 @@ extents = Vector2( 30.5, 58 )
 position = Vector2( 136, 312 )
 
 [node name="Enemy1" parent="." instance=ExtResource( 3 )]
-modulate = Color( 1, 0.380392, 0.380392, 1 )
-position = Vector2( 807, 260 )
-collision_layer = 2
+position = Vector2( 950, 288 )
 PATROL_STATE_SPEED = 20
-danger_range = 100
+attack_range = 150
 
 [node name="Wall" type="StaticBody2D" parent="."]
-position = Vector2( 499, 306 )
+position = Vector2( 846, 468 )
 collision_layer = 3
 collision_mask = 3
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="Wall"]
 scale = Vector2( 1, 1.88 )
@@ -32,9 +33,12 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="Wall2" type="StaticBody2D" parent="."]
-position = Vector2( 563, 472 )
+position = Vector2( 220, 487 )
 collision_layer = 3
 collision_mask = 3
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="Wall2"]
 scale = Vector2( 1, 1.88 )
@@ -44,9 +48,12 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="Wall3" type="StaticBody2D" parent="."]
-position = Vector2( 692, 164 )
+position = Vector2( 759, 99 )
 collision_layer = 3
 collision_mask = 3
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="Wall3"]
 scale = Vector2( 1, 1.88 )
@@ -55,22 +62,13 @@ texture = ExtResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Wall3"]
 shape = SubResource( 1 )
 
-[node name="Wall7" type="StaticBody2D" parent="Wall3"]
-position = Vector2( -577, -78 )
-collision_layer = 3
-collision_mask = 3
-
-[node name="Sprite" type="Sprite" parent="Wall3/Wall7"]
-scale = Vector2( 1, 1.88 )
-texture = ExtResource( 2 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall3/Wall7"]
-shape = SubResource( 1 )
-
 [node name="Wall4" type="StaticBody2D" parent="."]
-position = Vector2( 824, 424 )
+position = Vector2( 657, 524 )
 collision_layer = 3
 collision_mask = 3
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="Wall4"]
 scale = Vector2( 1, 1.88 )
@@ -80,9 +78,12 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="Wall5" type="StaticBody2D" parent="."]
-position = Vector2( 308, 121 )
+position = Vector2( 214, 90 )
 collision_layer = 3
 collision_mask = 3
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="Wall5"]
 scale = Vector2( 1, 1.88 )
@@ -92,13 +93,31 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="Wall6" type="StaticBody2D" parent="."]
-position = Vector2( 273, 496 )
+position = Vector2( 425, 522 )
 collision_layer = 3
 collision_mask = 3
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="Wall6"]
 scale = Vector2( 1, 1.88 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Wall6"]
+shape = SubResource( 1 )
+
+[node name="Wall7" type="StaticBody2D" parent="."]
+position = Vector2( 474, 81 )
+collision_layer = 3
+collision_mask = 3
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Wall7"]
+scale = Vector2( 1, 1.88 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall7"]
 shape = SubResource( 1 )

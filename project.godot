@@ -8,6 +8,28 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "KinematicBody2D",
+"class": "Enemy",
+"language": "GDScript",
+"path": "res://enemies/enemy.gd"
+}, {
+"base": "Enemy",
+"class": "EnemyMelee",
+"language": "GDScript",
+"path": "res://enemies/enemy_melee.gd"
+}, {
+"base": "Enemy",
+"class": "EnemyRanged",
+"language": "GDScript",
+"path": "res://enemies/enemy_ranged.gd"
+} ]
+_global_script_class_icons={
+"Enemy": "res://goblin-icon.png",
+"EnemyMelee": "res://sword-icon.png",
+"EnemyRanged": "res://bow-icon.png"
+}
+
 [application]
 
 config/name="Dwarf Adventure"

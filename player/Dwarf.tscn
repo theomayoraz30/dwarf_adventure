@@ -9,7 +9,7 @@ extents = Vector2( 36.5, 29 )
 [sub_resource type="Animation" id=2]
 resource_name = "test"
 
-[node name="Dwarf" type="KinematicBody2D"]
+[node name="Dwarf" type="KinematicBody2D" groups=["player"]]
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
