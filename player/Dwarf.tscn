@@ -5,7 +5,7 @@
 [ext_resource path="res://player/player.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 4.17703, 1.68782 )
+extents = Vector2( 36.5, 29 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 1.25, 4.4625 )
@@ -70,7 +70,7 @@ scale = Vector2( 8, 10 )
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.446295, 0.446295 )
+scale = Vector2( 5, 5 )
 texture = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
