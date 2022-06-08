@@ -3,7 +3,7 @@ extends Enemy
 class_name EnemyMelee, "res://sword-icon.png"
 
 onready var anim_player: AnimationPlayer = $AnimationPlayer;
-	
+
 func idle_state(_delta):
 	# Play animation or something
 	set_idle_interest();

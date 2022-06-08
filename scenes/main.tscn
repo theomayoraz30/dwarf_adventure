@@ -6,6 +6,9 @@
 [node name="main" type="Node2D"]
 
 [node name="Enemy2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 886, 315 )
+ATTACK_STATE_SPEED = 75
+attack_range = 400
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 141, 315 )
