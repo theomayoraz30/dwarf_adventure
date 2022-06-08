@@ -5,6 +5,8 @@ export (int) var SPEED = 200;
 export (int) var MAX_HEALTH = 6; # 1 heart = 2 hps
 export (int) var health = 6; # 1 heart = 2 hps
 
+onready var anim_player = $Weapon/AnimationPlayer
+
 var velocity = Vector2();
 
 # this will execute often
@@ -21,4 +23,9 @@ func take_damage(damage):
 		die();
 
 func die():
-	pass
+	pass;
+
+	
+func _process(_delta):
+	if Input.get_action_strength("attack"):
+		anim_player.play("attack");
