@@ -4,19 +4,17 @@ extends KinematicBody2D
 export (int) var SPEED = 200;
 export (int) var MAX_HEALTH = 6; # 1 heart = 2 hps
 export (int) var health = 6; # 1 heart = 2 hps
-
 onready var anim_player = $Weapon/AnimationPlayer
 
 var velocity = Vector2();
 
-# this will execute often
-func _physics_process(_delta):
+func _physics_process(delta):
 	var x = Input.get_axis("left", "right");
 	var y = Input.get_axis("up", "down");
 	velocity = Vector2(x,y).normalized();
 	
 	velocity = move_and_slide(velocity * SPEED);
-
+	
 func take_damage(damage):
 	health -= damage
 	if health <= 0:
@@ -26,6 +24,6 @@ func die():
 	pass;
 
 	
-func _process(_delta):
+func _process(delta):
 	if Input.get_action_strength("attack"):
 		anim_player.play("attack");

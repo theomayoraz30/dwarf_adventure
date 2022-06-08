@@ -11,3 +11,6 @@ position = Vector2( 874, 341 )
 [node name="player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 141, 315 )
 scale = Vector2( 5, 5 )
+SPEED = 200
+MAX_HEALTH = 6
+health = 6

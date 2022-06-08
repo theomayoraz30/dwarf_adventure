@@ -66,6 +66,9 @@ tracks/1/keys = {
 
 [node name="player" type="KinematicBody2D" groups=["player"]]
 script = ExtResource( 1 )
+SPEED = null
+MAX_HEALTH = null
+health = null
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
