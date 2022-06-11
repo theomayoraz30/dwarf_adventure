@@ -1,16 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://enemies/enemy_ranged.gd" type="Script" id=1]
 [ext_resource path="res://enemies/blackEnemies.png" type="Texture" id=2]
-[ext_resource path="res://bow-icon.png" type="Texture" id=3]
+[ext_resource path="res://icons/bow-icon.png" type="Texture" id=3]
+[ext_resource path="res://enemies/Arrow.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 22, 22 )
+extents = Vector2( 4.5, 4.5 )
 
 [sub_resource type="Animation" id=3]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("Weapon/CollisionShape2D:disabled")
+tracks/0/path = NodePath("Weapon/Sprite:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -19,83 +20,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Weapon/CollisionShape2D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( -40, -25 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Weapon/CollisionShape2D:rotation_degrees")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0.0 ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("Weapon/Sprite:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0.2, 0.2 ) ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Weapon/Sprite:rotation_degrees")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ -225.0 ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("Weapon/Sprite:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( -20, 0 ) ]
-}
-
-[sub_resource type="Animation" id=4]
-resource_name = "attack"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/path = NodePath("Weapon/Sprite:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0.2, 0.2 ) ]
+"values": [ Vector2( -5.00001, 7.62939e-06 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
@@ -110,6 +35,45 @@ tracks/1/keys = {
 "values": [ -225.0 ]
 }
 tracks/2/type = "value"
+tracks/2/path = NodePath("Weapon/Sprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0.04, 0.04 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "attack"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Weapon/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.04, 0.04 ), Vector2( 0.04, 0.04 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -225.0, -225.0 ]
+}
+tracks/2/type = "value"
 tracks/2/path = NodePath("Weapon/Sprite:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
@@ -119,19 +83,24 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.1, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( -20, 0 ), Vector2( 0, 0 ), Vector2( -20, 0 ) ]
+"values": [ Vector2( -5.00001, 7.62939e-06 ), Vector2( 0, 0 ), Vector2( -5.00001, 7.62939e-06 ) ]
 }
 
-[node name="EnemyRanged" type="KinematicBody2D"]
+[node name="EnemyRanged" type="KinematicBody2D" groups=["enemy"]]
 script = ExtResource( 1 )
+ATTACK_STATE_SPEED = 10
+PATROL_STATE_SPEED = 5
+num_rays = 16
+agro_range = 200
+patrol_range = 10
+arrow = ExtResource( 4 )
+flee_range = 100
+ARROW_SPEED = 50
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( -1, 0 )
-scale = Vector2( 5, 5 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -1, 0 )
 shape = SubResource( 1 )
 
 [node name="Timer" type="Timer" parent="."]
@@ -144,7 +113,9 @@ anims/attack = SubResource( 4 )
 [node name="Weapon" type="Node2D" parent="."]
 
 [node name="Sprite" type="Sprite" parent="Weapon"]
-position = Vector2( -20, 0 )
+position = Vector2( -5.00001, 7.62939e-06 )
 rotation = -3.92699
-scale = Vector2( 0.2, 0.2 )
+scale = Vector2( 0.04, 0.04 )
 texture = ExtResource( 3 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_anim_player_animation_finished"]

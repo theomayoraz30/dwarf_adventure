@@ -1,8 +1,10 @@
 extends Enemy
 
-class_name EnemyRanged, "res://bow-icon.png"
+class_name EnemyRanged, "res://icons/bow-icon.png"
 
-export var flee_range = 200
+export(PackedScene) var arrow;
+export var flee_range = 200;
+export var ARROW_SPEED = 500
 onready var anim_player: AnimationPlayer = $AnimationPlayer;
 
 func idle_state(_delta):
@@ -21,31 +23,31 @@ func patrol_state(_delta):
 	
 	if distance_to_player < agro_range:
 		state = ATTACK;
-		SPEED = ATTACK_STATE_SPEED;
 		
 func attack_state(_delta):
 	set_attack_interest(direction_to_player);
-	set_danger(player);
+	set_danger(player.global_position)
 	
 	if player.global_position.x < global_position.x:
-		$Sprite.scale.x = 5;
+		$Sprite.scale.x = 1;
 		$Weapon.scale.x = 1;
 	elif player.global_position.x > global_position.x:
-		$Sprite.scale.x = -5;
+		$Sprite.scale.x = -1;
 		$Weapon.scale.x = -1;
 	
 	if distance_to_player < attack_range:
-		set_idle_interest()
+#		ROTATE AROUND PLAYER
+		set_attacking_interest();
+
 		if not anim_player.is_playing():
 			anim_player.play("attack");
-			
-	if distance_to_player < flee_range:
-		set_attack_interest(-direction_to_player)
+	
+#	if distance_to_player < flee_range:
+#		set_attack_interest(-direction_to_player)
 	
 	if distance_to_player > agro_range:
 		state = PATROL;
-		SPEED = PATROL_STATE_SPEED;
-		
+	
 	choose_direction();
 
 func set_patrol_interest():
@@ -64,8 +66,14 @@ func timer_timeout():
 		get_random_patrol_point();
 	elif state == PATROL:
 		state = IDLE;
-		patrol_position = Vector2.ZERO;
-		velocity = Vector2.ZERO;
-		
-	print("Timer timeout");
+	
 	$Timer.start(rand_range(2, 5));
+
+func _on_anim_player_animation_finished(anim_name):
+	if anim_name == "attack":
+		shoot();
+
+func shoot():
+	var a: Arrow = arrow.instance();
+	get_parent().add_child(a);
+	a.global_position = self.global_position;
