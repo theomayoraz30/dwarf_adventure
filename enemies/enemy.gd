@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-class_name Enemy, "res://goblin-icon.png"
+class_name Enemy, "res://icons/goblin-icon.png"
 
 export var ATTACK_STATE_SPEED = 100;
 export var PATROL_STATE_SPEED = 50;
@@ -10,7 +10,7 @@ export var num_rays = 8;
 export var attack_range = 100;
 export var agro_range = 500;
 export var patrol_range = 32;
-export var damage = 5;
+export var damage = 1;
 
 var SPEED: float = 150;
 
@@ -20,8 +20,8 @@ onready var spawn_location: Vector2 = global_position;
 enum { IDLE, PATROL, ATTACK };
 var state = IDLE;
 
-var distance_to_player = Vector2();
-var direction_to_player = Vector2();
+var distance_to_player := 0.0;
+var direction_to_player := Vector2();
 
 # context array
 var ray_directions = []
@@ -50,20 +50,37 @@ func setup_rays():
 		var angle = i * 2 * PI / num_rays;
 		ray_directions[i] = Vector2.RIGHT.rotated(angle);
 
+func _draw():	
+	for i in num_rays:
+		draw_line(Vector2.ZERO, ray_directions[i]*8, Color.white);
+		
+		if interest[i] && interest[i] > 0:
+			draw_line(Vector2.ZERO, ray_directions[i]*10, Color.green);
+		
+		if danger[i] && danger[i] > 0:
+			draw_line(Vector2.ZERO, ray_directions[i]*10, Color.red);
+
 func _physics_process(_delta):
 	var desired_velocity = chosen_dir * SPEED;
 	velocity = velocity.linear_interpolate(desired_velocity, force);
 	velocity = move_and_slide(velocity);
-	
+	update()
+
 func _process(delta):
 	distance_to_player = player.global_position.distance_to(global_position);
 	direction_to_player = global_position.direction_to(player.global_position);
 	
 	# STATE HANDELING
 	match state:
-		IDLE: idle_state(delta);
-		PATROL: patrol_state(delta);
-		ATTACK: attack_state(delta);
+		IDLE:
+			SPEED = 0;
+			idle_state(delta);
+		PATROL: 
+			SPEED = PATROL_STATE_SPEED;
+			patrol_state(delta);
+		ATTACK:
+			SPEED = ATTACK_STATE_SPEED;
+			attack_state(delta);
 
 func idle_state(_delta):
 	pass
@@ -73,12 +90,17 @@ func patrol_state(_delta):
 
 func attack_state(_delta):
 	pass
+	
 
+func set_attacking_interest():
+	for i in num_rays:
+		var dir = direction_to_player.cross(ray_directions[i]);
+		interest[i] = max(0, dir);
 
 func set_idle_interest():
 	for i in num_rays:
-		interest[i] = 0;
-		
+		interest[i] = 1.0;
+
 func set_danger(danger_body = null):
 	var space_state = get_world_2d().direct_space_state;
 	for i in num_rays:

@@ -1,9 +1,9 @@
 extends Enemy
 
-class_name EnemyMelee, "res://sword-icon.png"
+class_name EnemyMelee, "res://icons/sword-icon.png"
 
 onready var anim_player: AnimationPlayer = $AnimationPlayer;
-	
+
 func idle_state(_delta):
 	# Play animation or something
 	set_idle_interest();
@@ -27,22 +27,21 @@ func attack_state(_delta):
 	set_danger();
 	
 	if player.global_position.x < global_position.x:
-		$Sprite.scale.x = 5;
+		$Sprite.scale.x = 1;
 		$Weapon.scale.x = 1;
 		# $Weapon/Sprite.scale.x = 1;
 	elif player.global_position.x > global_position.x:
-		$Sprite.scale.x = -5;
+		$Sprite.scale.x = -1;
 		$Weapon.scale.x = -1;
 		# $Weapon/Sprite.scale.x = -1;
 	
 	if distance_to_player < attack_range:
-		set_idle_interest()
+		set_attacking_interest();
 		if not anim_player.is_playing():
 			anim_player.play("attack");
 	
 	if distance_to_player > agro_range:
 		state = PATROL;
-		SPEED = PATROL_STATE_SPEED;
 		
 	choose_direction();
 
@@ -64,12 +63,10 @@ func timer_timeout():
 		state = IDLE;
 		patrol_position = Vector2.ZERO;
 		velocity = Vector2.ZERO;
-		
-	print("Timer timeout");
+	
 	$Timer.start(rand_range(2, 5));
 
 
 func _on_weapon_body_entered(body):
 	if body.is_in_group("player") && body.has_method("take_damage"):
-		print(body);
 		body.take_damage(damage);

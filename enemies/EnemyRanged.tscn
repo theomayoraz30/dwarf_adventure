@@ -1,0 +1,121 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://enemies/enemy_ranged.gd" type="Script" id=1]
+[ext_resource path="res://enemies/blackEnemies.png" type="Texture" id=2]
+[ext_resource path="res://icons/bow-icon.png" type="Texture" id=3]
+[ext_resource path="res://enemies/Arrow.tscn" type="PackedScene" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 4.5, 4.5 )
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Weapon/Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -5.00001, 7.62939e-06 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -225.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Weapon/Sprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0.04, 0.04 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "attack"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Weapon/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.04, 0.04 ), Vector2( 0.04, 0.04 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -225.0, -225.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Weapon/Sprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -5.00001, 7.62939e-06 ), Vector2( 0, 0 ), Vector2( -5.00001, 7.62939e-06 ) ]
+}
+
+[node name="EnemyRanged" type="KinematicBody2D" groups=["enemy"]]
+script = ExtResource( 1 )
+ATTACK_STATE_SPEED = 10
+PATROL_STATE_SPEED = 5
+num_rays = 16
+agro_range = 200
+patrol_range = 10
+arrow = ExtResource( 4 )
+flee_range = 100
+ARROW_SPEED = 50
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 3 )
+anims/attack = SubResource( 4 )
+
+[node name="Weapon" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Weapon"]
+position = Vector2( -5.00001, 7.62939e-06 )
+rotation = -3.92699
+scale = Vector2( 0.04, 0.04 )
+texture = ExtResource( 3 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_anim_player_animation_finished"]
