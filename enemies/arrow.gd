@@ -21,7 +21,8 @@ func _on_arrow_body_entered(body: Node):
 		
 	if body.has_method("take_damage"):
 		body.take_damage(1);
-		destroy()
+		
+	destroy()
 
 func destroy():
 	queue_free()

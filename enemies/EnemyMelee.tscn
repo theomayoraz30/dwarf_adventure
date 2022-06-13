@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/Weapon.gd" type="Script" id=1]
 [ext_resource path="res://enemies/enemy_melee.gd" type="Script" id=2]
 [ext_resource path="res://enemies/blackEnemies.png" type="Texture" id=3]
+[ext_resource path="res://player/sword.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.5, 4.5 )
@@ -31,7 +32,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -9, -7 ) ]
+"values": [ Vector2( 9, -7 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Weapon/CollisionShape2D:rotation_degrees")
@@ -48,7 +49,6 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id=4]
 resource_name = "attack"
-length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("Weapon/CollisionShape2D:position")
 tracks/0/interp = 1
@@ -59,7 +59,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( -9, -7 ), Vector2( 7, -12 ), Vector2( -23, 4 ), Vector2( -9, -7 ) ]
+"values": [ Vector2( 9, -7 ), Vector2( -16, -2 ), Vector2( 21, 11 ), Vector2( 9, -7 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Weapon/CollisionShape2D:rotation_degrees")
@@ -71,7 +71,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, 58.4, -100.0, 0.0 ]
+"values": [ 0.0, -43.8, -245.9, -360.0 ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Weapon/CollisionShape2D:disabled")
@@ -84,6 +84,34 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
 "values": [ true, false, true ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "patrol"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Weapon/CollisionShape2D:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 90.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Weapon/CollisionShape2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 8, 8 ) ]
 }
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -111,13 +139,19 @@ one_shot = true
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 3 )
 anims/attack = SubResource( 4 )
+anims/patrol = SubResource( 5 )
 
 [node name="Weapon" type="Area2D" parent="."]
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Weapon"]
-position = Vector2( -9, -7 )
+position = Vector2( 9, -7 )
 shape = SubResource( 2 )
 disabled = true
+
+[node name="Sprite" type="Sprite" parent="Weapon/CollisionShape2D"]
+position = Vector2( 0, 2 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
 
 [connection signal="body_entered" from="Weapon" to="." method="_on_weapon_body_entered"]

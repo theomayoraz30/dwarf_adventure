@@ -5,6 +5,8 @@ export (int) var SPEED = 200;
 export (int) var MAX_HEALTH = 6; # 1 heart = 2 hps
 export (int) var health = 6; # 1 heart = 2 hps
 onready var anim_player = $AnimationPlayer
+
+onready var weapon = $Weapon
 onready var anim_player_weapon = $Weapon/AnimationPlayer
 
 var velocity = Vector2();
@@ -31,5 +33,23 @@ func die():
 
 	
 func _process(delta):
+	sword_to_mouse();
+	flip();
 	if Input.get_action_strength("attack"):
 		anim_player_weapon.play("attack");
+
+
+func sword_to_mouse():
+	var mouse_pos := get_global_mouse_position();
+	var rot = get_angle_to(mouse_pos);
+		
+	weapon.rotation = rot;
+
+func flip():
+	var mouse_pos := get_global_mouse_position();
+	if mouse_pos.x > global_position.x:
+		$AnimatedSprite.scale.x = 1;
+		weapon.scale.y = 1;
+	elif mouse_pos.x < global_position.x:
+		$AnimatedSprite.scale.x = -1;
+		weapon.scale.y = -1;

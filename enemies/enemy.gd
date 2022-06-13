@@ -16,6 +16,9 @@ var SPEED: float = 150;
 
 onready var player: KinematicBody2D = get_parent().get_node("player");
 onready var spawn_location: Vector2 = global_position;
+onready var weapon = $Weapon;
+onready var anim_player := $AnimationPlayer;
+#onready var anim_player_weapon := $Weapon/AnimationPlayer;
 
 enum { IDLE, PATROL, ATTACK };
 var state = IDLE;
@@ -50,7 +53,7 @@ func setup_rays():
 		var angle = i * 2 * PI / num_rays;
 		ray_directions[i] = Vector2.RIGHT.rotated(angle);
 
-func _draw():	
+func _draw():
 	for i in num_rays:
 		draw_line(Vector2.ZERO, ray_directions[i]*8, Color.white);
 		
@@ -75,7 +78,7 @@ func _process(delta):
 		IDLE:
 			SPEED = 0;
 			idle_state(delta);
-		PATROL: 
+		PATROL:
 			SPEED = PATROL_STATE_SPEED;
 			patrol_state(delta);
 		ATTACK:
@@ -86,11 +89,24 @@ func idle_state(_delta):
 	pass
 
 func patrol_state(_delta):
-	pass
+	if not anim_player.is_playing():
+		anim_player.play("patrol");
+	
+	if velocity.x > 0:
+		$Sprite.scale.x = 1;
+		weapon.scale.x = 1
+	else:
+		$Sprite.scale.x = -1;
+		weapon.scale.x = -1
 
 func attack_state(_delta):
-	pass
-	
+	weapon.scale.x = 1
+	if player.global_position.x < global_position.x:
+		$Sprite.scale.x = -1;
+		weapon.scale.y = -1;
+	elif player.global_position.x > global_position.x:
+		$Sprite.scale.x = 1;
+		weapon.scale.y = 1;
 
 func set_attacking_interest():
 	for i in num_rays:
@@ -118,6 +134,7 @@ func choose_direction():
 		chosen_dir.normalized();
 
 func get_random_patrol_point():
+	randomize()
 	patrol_position = Vector2(
 		rand_range(spawn_location.x - patrol_range, spawn_location.y + patrol_range),
 		rand_range(spawn_location.x - patrol_range, spawn_location.y + patrol_range)

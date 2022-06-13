@@ -2,15 +2,14 @@ extends Enemy
 
 class_name EnemyMelee, "res://icons/sword-icon.png"
 
-onready var anim_player: AnimationPlayer = $AnimationPlayer;
-
 func idle_state(_delta):
 	# Play animation or something
 	set_idle_interest();
 	set_danger();
 	choose_direction();
 
-func patrol_state(_delta):
+func patrol_state(delta):
+	.patrol_state(delta) # Calling base function
 	set_patrol_interest();
 	set_danger();
 	choose_direction();
@@ -20,20 +19,14 @@ func patrol_state(_delta):
 	
 	if distance_to_player < agro_range:
 		state = ATTACK;
-		SPEED = ATTACK_STATE_SPEED;
 
-func attack_state(_delta):
+func attack_state(delta):
+	.attack_state(delta) # Calling base function
 	set_attack_interest();
 	set_danger();
 	
-	if player.global_position.x < global_position.x:
-		$Sprite.scale.x = 1;
-		$Weapon.scale.x = 1;
-		# $Weapon/Sprite.scale.x = 1;
-	elif player.global_position.x > global_position.x:
-		$Sprite.scale.x = -1;
-		$Weapon.scale.x = -1;
-		# $Weapon/Sprite.scale.x = -1;
+	var rot = get_angle_to(player.global_position);
+	weapon.rotation = rot;
 	
 	if distance_to_player < attack_range:
 		set_attacking_interest();

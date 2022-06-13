@@ -5,7 +5,6 @@ class_name EnemyRanged, "res://icons/bow-icon.png"
 export(PackedScene) var arrow;
 export var flee_range = 200;
 export var ARROW_SPEED = 500
-onready var anim_player: AnimationPlayer = $AnimationPlayer;
 
 func idle_state(_delta):
 	# Play animation or something
@@ -13,7 +12,8 @@ func idle_state(_delta):
 	set_danger();
 	choose_direction();
 
-func patrol_state(_delta):
+func patrol_state(delta):
+	.patrol_state(delta) # Calling base function
 	set_patrol_interest();
 	set_danger();
 	choose_direction();
@@ -24,16 +24,13 @@ func patrol_state(_delta):
 	if distance_to_player < agro_range:
 		state = ATTACK;
 		
-func attack_state(_delta):
+func attack_state(delta):
+	.attack_state(delta) # Calling base function
 	set_attack_interest(direction_to_player);
 	set_danger(player.global_position)
 	
-	if player.global_position.x < global_position.x:
-		$Sprite.scale.x = 1;
-		$Weapon.scale.x = 1;
-	elif player.global_position.x > global_position.x:
-		$Sprite.scale.x = -1;
-		$Weapon.scale.x = -1;
+	var rot = get_angle_to(player.global_position);
+	weapon.rotation = rot;
 	
 	if distance_to_player < attack_range:
 #		ROTATE AROUND PLAYER
@@ -41,9 +38,6 @@ func attack_state(_delta):
 
 		if not anim_player.is_playing():
 			anim_player.play("attack");
-	
-#	if distance_to_player < flee_range:
-#		set_attack_interest(-direction_to_player)
 	
 	if distance_to_player > agro_range:
 		state = PATROL;
@@ -77,3 +71,4 @@ func shoot():
 	var a: Arrow = arrow.instance();
 	get_parent().add_child(a);
 	a.global_position = self.global_position;
+	a.rotation = get_angle_to(player.global_position)

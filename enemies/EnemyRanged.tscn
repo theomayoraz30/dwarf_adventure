@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://enemies/enemy_ranged.gd" type="Script" id=1]
 [ext_resource path="res://enemies/blackEnemies.png" type="Texture" id=2]
@@ -20,7 +20,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -5.00001, 7.62939e-06 ) ]
+"values": [ Vector2( 5, 0 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
@@ -32,7 +32,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ -225.0 ]
+"values": [ -45.0 ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Weapon/Sprite:scale")
@@ -49,6 +49,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id=4]
 resource_name = "attack"
+length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("Weapon/Sprite:scale")
 tracks/0/interp = 1
@@ -71,7 +72,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ -225.0, -225.0 ]
+"values": [ -45.0, -45.0 ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Weapon/Sprite:position")
@@ -83,7 +84,35 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.1, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( -5.00001, 7.62939e-06 ), Vector2( 0, 0 ), Vector2( -5.00001, 7.62939e-06 ) ]
+"values": [ Vector2( 5, 0 ), Vector2( 0, 0 ), Vector2( 5, 0 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "patrol"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Weapon/Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 2, 4 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -1.2 ]
 }
 
 [node name="EnemyRanged" type="KinematicBody2D" groups=["enemy"]]
@@ -109,12 +138,13 @@ one_shot = true
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 3 )
 anims/attack = SubResource( 4 )
+anims/patrol = SubResource( 5 )
 
 [node name="Weapon" type="Node2D" parent="."]
 
 [node name="Sprite" type="Sprite" parent="Weapon"]
-position = Vector2( -5.00001, 7.62939e-06 )
-rotation = -3.92699
+position = Vector2( 5, 0 )
+rotation = -0.785398
 scale = Vector2( 0.04, 0.04 )
 texture = ExtResource( 3 )
 

@@ -12,20 +12,21 @@ height = 32.0
 [node name="main" type="Node2D"]
 
 [node name="player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 128, 102 )
+position = Vector2( 52, 95 )
 SPEED = 75
 
+[node name="Camera2D" type="Camera2D" parent="player"]
+current = true
+smoothing_enabled = true
+
 [node name="EnemyMelee" parent="." instance=ExtResource( 1 )]
-position = Vector2( 231, 104 )
+position = Vector2( 216, 70 )
 
 [node name="EnemyMelee2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 176, 38 )
-
-[node name="EnemyMelee3" parent="." instance=ExtResource( 1 )]
-position = Vector2( 171, 164 )
+position = Vector2( 218, 130 )
 
 [node name="EnemyRanged" parent="." instance=ExtResource( 4 )]
-position = Vector2( 262, 106 )
+position = Vector2( 246, 99 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2( 11, 91 )
