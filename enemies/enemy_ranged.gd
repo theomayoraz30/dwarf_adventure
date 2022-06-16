@@ -36,8 +36,8 @@ func attack_state(delta):
 #		ROTATE AROUND PLAYER
 		set_attacking_interest();
 
-		if not anim_player.is_playing():
-			anim_player.play("attack");
+		if not anim_player_weapon.is_playing():
+			anim_player_weapon.play("attack");
 	
 	if distance_to_player > agro_range:
 		state = PATROL;

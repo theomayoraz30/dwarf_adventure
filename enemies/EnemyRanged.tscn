@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://enemies/enemy_ranged.gd" type="Script" id=1]
 [ext_resource path="res://enemies/blackEnemies.png" type="Texture" id=2]
 [ext_resource path="res://icons/bow-icon.png" type="Texture" id=3]
 [ext_resource path="res://enemies/Arrow.tscn" type="PackedScene" id=4]
+[ext_resource path="res://enemies/bow-sheet.png" type="Texture" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.5, 4.5 )
@@ -11,7 +12,7 @@ extents = Vector2( 4.5, 4.5 )
 [sub_resource type="Animation" id=3]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("Weapon/Sprite:position")
+tracks/0/path = NodePath("Weapon/AnimatedSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -20,71 +21,23 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 5, 0 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ -45.0 ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Weapon/Sprite:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0.04, 0.04 ) ]
+"values": [ 0 ]
 }
 
 [sub_resource type="Animation" id=4]
 resource_name = "attack"
 length = 2.0
 tracks/0/type = "value"
-tracks/0/path = NodePath("Weapon/Sprite:scale")
+tracks/0/path = NodePath("Weapon/AnimatedSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector2( 0.04, 0.04 ), Vector2( 0.04, 0.04 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Weapon/Sprite:rotation_degrees")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ -45.0, -45.0 ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Weapon/Sprite:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 0.1, 0.5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( 5, 0 ), Vector2( 0, 0 ), Vector2( 5, 0 ) ]
+"times": PoolRealArray( 1.5, 1.6, 1.7, 1.8, 1.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 0, 2, 3, 0 ]
 }
 
 [sub_resource type="Animation" id=5]
@@ -115,6 +68,30 @@ tracks/1/keys = {
 "values": [ -1.2 ]
 }
 
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 5 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 5 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 5 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=10]
+animations = [ {
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
+"loop": true,
+"name": "attack",
+"speed": 5.0
+} ]
+
 [node name="EnemyRanged" type="KinematicBody2D" groups=["enemy"]]
 script = ExtResource( 1 )
 ATTACK_STATE_SPEED = 10
@@ -135,17 +112,25 @@ shape = SubResource( 1 )
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="Weapon" type="Node2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Weapon"]
+root_node = NodePath("../..")
 anims/RESET = SubResource( 3 )
 anims/attack = SubResource( 4 )
 anims/patrol = SubResource( 5 )
 
-[node name="Weapon" type="Node2D" parent="."]
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Weapon"]
+position = Vector2( 4, 0 )
+scale = Vector2( 0.749541, 0.749541 )
+frames = SubResource( 10 )
+animation = "attack"
 
 [node name="Sprite" type="Sprite" parent="Weapon"]
+visible = false
 position = Vector2( 5, 0 )
 rotation = -0.785398
 scale = Vector2( 0.04, 0.04 )
 texture = ExtResource( 3 )
 
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_anim_player_animation_finished"]
+[connection signal="animation_finished" from="Weapon/AnimationPlayer" to="." method="_on_anim_player_animation_finished"]

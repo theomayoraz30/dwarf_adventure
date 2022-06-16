@@ -30,8 +30,8 @@ func attack_state(delta):
 	
 	if distance_to_player < attack_range:
 		set_attacking_interest();
-		if not anim_player.is_playing():
-			anim_player.play("attack");
+		if not anim_player_weapon.is_playing():
+			anim_player_weapon.play("attack");
 	
 	if distance_to_player > agro_range:
 		state = PATROL;
@@ -62,4 +62,4 @@ func timer_timeout():
 
 func _on_weapon_body_entered(body):
 	if body.is_in_group("player") && body.has_method("take_damage"):
-		body.take_damage(damage);
+		body.take_damage(damage, self);

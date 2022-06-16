@@ -11,14 +11,16 @@ export var attack_range = 100;
 export var agro_range = 500;
 export var patrol_range = 32;
 export var damage = 1;
+export var health = 3;
+
 
 var SPEED: float = 150;
 
 onready var player: KinematicBody2D = get_parent().get_node("player");
 onready var spawn_location: Vector2 = global_position;
 onready var weapon = $Weapon;
-onready var anim_player := $AnimationPlayer;
-#onready var anim_player_weapon := $Weapon/AnimationPlayer;
+#onready var anim_player := $AnimationPlayer;
+onready var anim_player_weapon := $Weapon/AnimationPlayer;
 
 enum { IDLE, PATROL, ATTACK };
 var state = IDLE;
@@ -31,8 +33,10 @@ var ray_directions = []
 var interest = []
 var danger = []
 
-var chosen_dir = Vector2.ZERO;
-var velocity = Vector2.ZERO;
+var chosen_dir := Vector2.ZERO;
+var velocity := Vector2.ZERO;
+var knockback := Vector2.ZERO;
+var knockback_vector = Vector2.LEFT;
 
 var patrol_position = Vector2.ZERO;
 
@@ -63,10 +67,14 @@ func _draw():
 		if danger[i] && danger[i] > 0:
 			draw_line(Vector2.ZERO, ray_directions[i]*10, Color.red);
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	var desired_velocity = chosen_dir * SPEED;
 	velocity = velocity.linear_interpolate(desired_velocity, force);
 	velocity = move_and_slide(velocity);
+	
+	knockback = knockback.move_toward(Vector2.ZERO, 200 * delta);
+	knockback = move_and_slide(knockback)
+	knockback_vector = direction_to_player;
 	update()
 
 func _process(delta):
@@ -89,8 +97,8 @@ func idle_state(_delta):
 	pass
 
 func patrol_state(_delta):
-	if not anim_player.is_playing():
-		anim_player.play("patrol");
+	if not anim_player_weapon.is_playing():
+		anim_player_weapon.play("patrol");
 	
 	if velocity.x > 0:
 		$Sprite.scale.x = 1;
@@ -139,3 +147,13 @@ func get_random_patrol_point():
 		rand_range(spawn_location.x - patrol_range, spawn_location.y + patrol_range),
 		rand_range(spawn_location.x - patrol_range, spawn_location.y + patrol_range)
 	)
+	
+func take_damage(damage):
+	health -= damage;
+	player.knockback_vector = player.global_position.direction_to(global_position);
+	knockback = player.knockback_vector * 100;
+	if health <= 0:
+		die();
+
+func die():
+	pass;
