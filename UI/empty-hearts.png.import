@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bow-icon.png-fd1297ede8ff2e64c3dcce4d6b63d86f.stex"
+path="res://.import/empty-hearts.png-2c3b609396c16437ac6df10b1534dc2a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://bow-icon.png"
-dest_files=[ "res://.import/bow-icon.png-fd1297ede8ff2e64c3dcce4d6b63d86f.stex" ]
+source_file="res://UI/empty-hearts.png"
+dest_files=[ "res://.import/empty-hearts.png-2c3b609396c16437ac6df10b1534dc2a.stex" ]
 
 [params]
 

@@ -1,8 +1,6 @@
 extends Enemy
 
-class_name EnemyMelee, "res://icons/sword-icon.png"
-
-onready var anim_player: AnimationPlayer = $AnimationPlayer;
+class_name EnemyMelee, "res://icons/sword-icon.png" 
 
 func idle_state(_delta):
 	# Play animation or something
@@ -10,7 +8,8 @@ func idle_state(_delta):
 	set_danger();
 	choose_direction();
 
-func patrol_state(_delta):
+func patrol_state(delta):
+	.patrol_state(delta) # Calling base function
 	set_patrol_interest();
 	set_danger();
 	choose_direction();
@@ -20,25 +19,19 @@ func patrol_state(_delta):
 	
 	if distance_to_player < agro_range:
 		state = ATTACK;
-		SPEED = ATTACK_STATE_SPEED;
 
-func attack_state(_delta):
+func attack_state(delta):
+	.attack_state(delta) # Calling base function
 	set_attack_interest();
 	set_danger();
 	
-	if player.global_position.x < global_position.x:
-		$Sprite.scale.x = 1;
-		$Weapon.scale.x = 1;
-		# $Weapon/Sprite.scale.x = 1;
-	elif player.global_position.x > global_position.x:
-		$Sprite.scale.x = -1;
-		$Weapon.scale.x = -1;
-		# $Weapon/Sprite.scale.x = -1;
+	var rot = get_angle_to(player.global_position);
+	weapon.rotation = rot;
 	
 	if distance_to_player < attack_range:
 		set_attacking_interest();
-		if not anim_player.is_playing():
-			anim_player.play("attack");
+		if not anim_player_weapon.is_playing():
+			anim_player_weapon.play("attack");
 	
 	if distance_to_player > agro_range:
 		state = PATROL;
@@ -52,7 +45,7 @@ func set_patrol_interest():
 
 func set_attack_interest():
 	for i in num_rays:
-		var dir = ray_directions[i].dot(direction_to_player);
+		var dir = ray_directions[i].dot(direction_to_player); 
 		interest[i] = max(0, dir);
 
 func timer_timeout():
@@ -69,4 +62,4 @@ func timer_timeout():
 
 func _on_weapon_body_entered(body):
 	if body.is_in_group("player") && body.has_method("take_damage"):
-		body.take_damage(damage);
+		body.take_damage(damage, self);

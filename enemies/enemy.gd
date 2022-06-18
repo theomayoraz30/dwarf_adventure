@@ -11,11 +11,16 @@ export var attack_range = 100;
 export var agro_range = 500;
 export var patrol_range = 32;
 export var damage = 1;
+export var health = 3;
 
 var SPEED: float = 150;
 
 onready var player: KinematicBody2D = get_parent().get_node("player");
 onready var spawn_location: Vector2 = global_position;
+onready var weapon = $Weapon;
+#onready var anim_player := $AnimationPlayer;
+onready var anim_player_weapon := $Weapon/AnimationPlayer;
+onready var healthbar: TextureProgress = $HealthProgess;
 
 enum { IDLE, PATROL, ATTACK };
 var state = IDLE;
@@ -28,19 +33,24 @@ var ray_directions = []
 var interest = []
 var danger = []
 
-var chosen_dir = Vector2.ZERO;
-var velocity = Vector2.ZERO;
+var chosen_dir := Vector2.ZERO;
+var velocity := Vector2.ZERO;
+var knockback := Vector2.ZERO;
+var knockback_vector = Vector2.LEFT;
 
 var patrol_position = Vector2.ZERO;
+
+onready var timer = $Timer;
 
 func _ready():
 	setup_rays();
 	get_random_patrol_point()
 
-	var err = $Timer.connect("timeout", self, "timer_timeout");
+	healthbar.max_value = health;
+
+	var err = timer.connect("timeout", self, "timer_timeout");
 	if err: print_debug(err)
-	else:
-		$Timer.start(rand_range(2, 5));
+	else: timer.start(rand_range(2, 5));
 
 func setup_rays():
 	interest.resize(num_rays);
@@ -50,7 +60,7 @@ func setup_rays():
 		var angle = i * 2 * PI / num_rays;
 		ray_directions[i] = Vector2.RIGHT.rotated(angle);
 
-func _draw():	
+func _draw():
 	for i in num_rays:
 		draw_line(Vector2.ZERO, ray_directions[i]*8, Color.white);
 		
@@ -60,10 +70,14 @@ func _draw():
 		if danger[i] && danger[i] > 0:
 			draw_line(Vector2.ZERO, ray_directions[i]*10, Color.red);
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	var desired_velocity = chosen_dir * SPEED;
 	velocity = velocity.linear_interpolate(desired_velocity, force);
 	velocity = move_and_slide(velocity);
+	
+	knockback = knockback.move_toward(Vector2.ZERO, 200 * delta);
+	knockback = move_and_slide(knockback)
+	knockback_vector = direction_to_player;
 	update()
 
 func _process(delta):
@@ -75,7 +89,7 @@ func _process(delta):
 		IDLE:
 			SPEED = 0;
 			idle_state(delta);
-		PATROL: 
+		PATROL:
 			SPEED = PATROL_STATE_SPEED;
 			patrol_state(delta);
 		ATTACK:
@@ -86,11 +100,24 @@ func idle_state(_delta):
 	pass
 
 func patrol_state(_delta):
-	pass
+	if not anim_player_weapon.is_playing():
+		anim_player_weapon.play("patrol");
+	
+	if velocity.x > 0:
+		$Sprite.scale.x = 1;
+		weapon.scale.x = 1
+	else:
+		$Sprite.scale.x = -1;
+		weapon.scale.x = -1
 
 func attack_state(_delta):
-	pass
-	
+	weapon.scale.x = 1
+	if player.global_position.x < global_position.x:
+		$Sprite.scale.x = -1;
+		weapon.scale.y = -1;
+	elif player.global_position.x > global_position.x:
+		$Sprite.scale.x = 1;
+		weapon.scale.y = 1;
 
 func set_attacking_interest():
 	for i in num_rays:
@@ -118,7 +145,21 @@ func choose_direction():
 		chosen_dir.normalized();
 
 func get_random_patrol_point():
+	randomize()
 	patrol_position = Vector2(
 		rand_range(spawn_location.x - patrol_range, spawn_location.y + patrol_range),
 		rand_range(spawn_location.x - patrol_range, spawn_location.y + patrol_range)
 	)
+	
+func take_damage(damage):
+	health -= damage;
+	healthbar.value = health;
+	$HitSound.play();
+	player.knockback_vector = player.global_position.direction_to(global_position);
+	knockback = player.knockback_vector * 100;
+	if health <= 0:
+		die();
+
+func die():
+	yield($HitSound, "finished");
+	queue_free()
