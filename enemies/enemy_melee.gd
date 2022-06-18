@@ -1,6 +1,6 @@
 extends Enemy
 
-class_name EnemyMelee, "res://icons/sword-icon.png"
+class_name EnemyMelee, "res://icons/sword-icon.png" 
 
 func idle_state(_delta):
 	# Play animation or something
@@ -45,7 +45,7 @@ func set_patrol_interest():
 
 func set_attack_interest():
 	for i in num_rays:
-		var dir = ray_directions[i].dot(direction_to_player);
+		var dir = ray_directions[i].dot(direction_to_player); 
 		interest[i] = max(0, dir);
 
 func timer_timeout():

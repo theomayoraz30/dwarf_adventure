@@ -13,7 +13,6 @@ export var patrol_range = 32;
 export var damage = 1;
 export var health = 3;
 
-
 var SPEED: float = 150;
 
 onready var player: KinematicBody2D = get_parent().get_node("player");
@@ -21,6 +20,7 @@ onready var spawn_location: Vector2 = global_position;
 onready var weapon = $Weapon;
 #onready var anim_player := $AnimationPlayer;
 onready var anim_player_weapon := $Weapon/AnimationPlayer;
+onready var healthbar: TextureProgress = $HealthProgess;
 
 enum { IDLE, PATROL, ATTACK };
 var state = IDLE;
@@ -40,14 +40,17 @@ var knockback_vector = Vector2.LEFT;
 
 var patrol_position = Vector2.ZERO;
 
+onready var timer = $Timer;
+
 func _ready():
 	setup_rays();
 	get_random_patrol_point()
 
-	var err = $Timer.connect("timeout", self, "timer_timeout");
+	healthbar.max_value = health;
+
+	var err = timer.connect("timeout", self, "timer_timeout");
 	if err: print_debug(err)
-	else:
-		$Timer.start(rand_range(2, 5));
+	else: timer.start(rand_range(2, 5));
 
 func setup_rays():
 	interest.resize(num_rays);
@@ -150,10 +153,13 @@ func get_random_patrol_point():
 	
 func take_damage(damage):
 	health -= damage;
+	healthbar.value = health;
+	$HitSound.play();
 	player.knockback_vector = player.global_position.direction_to(global_position);
 	knockback = player.knockback_vector * 100;
 	if health <= 0:
 		die();
 
 func die():
-	pass;
+	yield($HitSound, "finished");
+	queue_free()

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/zemmour-goblin.mp3-b0151c8d48861d9387178a9a73167909.mp3str"
+
+[deps]
+
+source_file="res://sound/zemmour-goblin.mp3"
+dest_files=[ "res://.import/zemmour-goblin.mp3-b0151c8d48861d9387178a9a73167909.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

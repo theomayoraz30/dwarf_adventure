@@ -1,10 +1,13 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://enemies/enemy_ranged.gd" type="Script" id=1]
 [ext_resource path="res://enemies/blackEnemies.png" type="Texture" id=2]
 [ext_resource path="res://icons/bow-icon.png" type="Texture" id=3]
 [ext_resource path="res://enemies/Arrow.tscn" type="PackedScene" id=4]
 [ext_resource path="res://enemies/bow-sheet.png" type="Texture" id=5]
+[ext_resource path="res://UI/healthbar-bg.png" type="Texture" id=6]
+[ext_resource path="res://UI/healthbar.png" type="Texture" id=7]
+[ext_resource path="res://sound/zemmour-goblin.mp3" type="AudioStream" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.5, 4.5 )
@@ -103,6 +106,17 @@ arrow = ExtResource( 4 )
 flee_range = 100
 ARROW_SPEED = 50
 
+[node name="HealthProgess" type="TextureProgress" parent="."]
+margin_left = -6.0
+margin_top = -10.0
+margin_right = 122.0
+margin_bottom = 30.0
+rect_scale = Vector2( 0.0942375, 0.0942375 )
+max_value = 6.0
+value = 6.0
+texture_under = ExtResource( 6 )
+texture_progress = ExtResource( 7 )
+
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 
@@ -133,4 +147,9 @@ rotation = -0.785398
 scale = Vector2( 0.04, 0.04 )
 texture = ExtResource( 3 )
 
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+pitch_scale = 0.8
+
 [connection signal="animation_finished" from="Weapon/AnimationPlayer" to="." method="_on_anim_player_animation_finished"]
+[connection signal="finished" from="HitSound" to="." method="_on_HitSound_finished"]

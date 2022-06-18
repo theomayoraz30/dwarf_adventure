@@ -1,5 +1,8 @@
 extends KinematicBody2D
 
+signal died();
+signal take_damage(damage);
+
 # Speed for the player
 export (int) var SPEED = 200;
 export (int) var MAX_HEALTH = 6; # 1 heart = 2 hps
@@ -32,11 +35,12 @@ func _physics_process(delta):
 func take_damage(damage, enemy):
 	health -= damage;
 	knockback = enemy.knockback_vector * 100;
+	emit_signal("take_damage", health)
 	if health <= 0:
 		die();
 
 func die():
-	pass;
+	emit_signal("died");
 
 func _process(_delta):
 	sword_to_mouse();
